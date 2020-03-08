@@ -1,6 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from collections import Counter
+
+alphabet = 'abcdefghijklmnopqrstuvwxyzåäö'
 
 def main():
 	
@@ -8,12 +11,9 @@ def main():
 	message = file.read()
 	file.close()
 
-	oldchar = input("Input old char: ")
-	newchar = input("Input new char: ")
-	
-	for character in message:
-		if(character == oldchar):
-			character = newchar
+	print '\n' + message + '\n'
+	freq = Counter(message)
+	print freq
 
 
 if __name__ == '__main__':
