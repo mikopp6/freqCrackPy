@@ -1,20 +1,32 @@
 #!/usr/bin/python
 
-from collections import Counter
+alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ"
 
 def main():
 
-	encrypted_message = ""
 	with open("message", encoding="utf-8") as f:
+		encrypted_message = ""
 		for line in f:
 			encrypted_message += line
+	totalcharacters = len(encrypted_message) - encrypted_message.count(' ')
+	message_freq = {}
+	for k in alphabet:
+		amount = encrypted_message.count(k)
+		message_freq[k] = round(amount/totalcharacters*100, 2)
 
-	finnish_freq = ""
+	sorted_message_freq = {}
+	for k in sorted(message_freq, key=message_freq.get, reverse=True):
+		sorted_message_freq[k] = message_freq[k]
+	
 	with open("finnishFreq", encoding="utf-8") as f:
+		finnish_freq = {}
 		for line in f:
-			finnish_freq += line
+			letter,count = line.split('=')
+			finnish_freq[letter] = float(count)
 
-	message_freq = Counter(encrypted_message)
+	sorted_finnish_freq = {}
+	for k in sorted(finnish_freq, key=finnish_freq.get, reverse=True):
+		sorted_finnish_freq[k] = finnish_freq[k]
 
 	key = ""
 	message = encrypted_message
@@ -29,9 +41,10 @@ def main():
 			message = message.replace(oldchar,newchar)
 			key = key + (oldchar + "=" + newchar + ", ")
 		elif task=="freq":
-			print("\nFrequencies in message ")
-			print(message_freq)
-			print("\nFrequencies in finnish language " + finnish_freq)
+			print("\nFrequencies in message:")
+			print(sorted_message_freq)
+			print("\nFrequencies in finnish language:")
+			print(sorted_finnish_freq)
 		elif task=="reset":
 			message = encrypted_message;
 		elif task=="quit":
@@ -42,8 +55,6 @@ def main():
 	print("\nOriginal encrypted message:\n" + encrypted_message)
 	print("\nKeys for encryption: " + key)
 	print("\nDecrypted message:\n" + message)
-
-
 
 if __name__ == '__main__':
 	# Call the main function when this script is executed
